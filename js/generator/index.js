@@ -38,19 +38,22 @@ const invert = (number) =>
 export const renderCube = ({
   size,
   usedSpace: { horizontalUnits, verticalUnits },
-  position: { horizontalPos, verticalPos }, 
+  position: { horizontalPos, verticalPos, cameraPos },
   zIndex,
-  color
+  color,
 }) => {
   const cube = document.createElement("div");
   cube.classList.add("cube", "perspective");
-  
-  cube.style.zIndex = zIndex
+
+  applyCssTo(cube, {
+    zIndex,
+  });
+
   const cubeFaces = [
     {
       side: "front",
       cssProps: {
-        transform: `rotateY(0deg) translateZ(${size / 2}px)`,
+        transform: `rotateY(0deg) translateZ(${size / 2}px) `,
         backgroundColor: color,
       },
     },
@@ -73,7 +76,7 @@ export const renderCube = ({
       cssProps: {
         transform: `rotateY(-90deg) translateZ(${size / 2}px)`,
         backgroundColor: color,
-        filter: 'brightness(85%)'
+        filter: "brightness(85%)",
       },
     },
     {
@@ -81,7 +84,7 @@ export const renderCube = ({
       cssProps: {
         transform: `rotateX(90deg) translateZ(${size / 2}px)`,
         backgroundColor: color,
-        filter: 'brightness(90%)'
+        filter: "brightness(90%)",
       },
     },
     {
@@ -89,7 +92,7 @@ export const renderCube = ({
       cssProps: {
         transform: `rotateX(-90deg) translateZ(${size / 2}px)`,
         backgroundColor: color,
-        filter: 'brightness(50%)'
+        filter: "brightness(50%)",
       },
     },
   ];
@@ -116,9 +119,14 @@ export const renderCube = ({
     face.classList.add(faceName);
 
     face.innerText = faceName;
-    
+
     cube.appendChild(face);
   });
 
   return cube;
+};
+export const clearScene = (keyboardScene, usedSpace) => {
+  keyboardScene.innerHTML = "";
+  usedSpace.horizontalUnits = 0;
+  usedSpace.verticalUnits = 0;
 };

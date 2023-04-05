@@ -290,4 +290,37 @@ export default [
       },
     ],
   },
+  {
+    keyName: "O",
+    KeyCode: 79,
+    horizontalSpaceUnit: 4,
+    verticalSpaceUnit: 5,
+    cubes: [
+      {
+        horizontalPos: 0,
+        verticalPos: 0,
+      },
+      {
+        horizontalPos: 0,
+        verticalPos: 1,
+      },
+      {
+        horizontalPos: 1,
+        verticalPos: 2,
+      },
+      {
+        horizontalPos: 0,
+        verticalPos: 3,
+      },
+      {
+        horizontalPos: 1,
+        verticalPos: 4,
+      },
+      {
+        horizontalPos: 0,
+        verticalPos: 5,
+      },
+      
+    ],
+  },
 ];
