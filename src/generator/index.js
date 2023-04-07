@@ -1,4 +1,3 @@
-import { generateRandomColor } from "../helpers/color/index.js";
 import { applyCssTo } from "../helpers/css/index.js";
 
 const getPositionByFace = (face) => {
@@ -37,9 +36,8 @@ const invert = (number) =>
 
 export const renderCube = ({
   size,
-  usedSpace: { horizontalUnits, verticalUnits },
-  position: { horizontalPos, verticalPos, cameraPos },
-  zIndex,
+  usedSpace: { horizontalUnits, verticalUnits, zIndex },
+  position: { horizontalPos, verticalPos },
   color,
 }) => {
   const cube = document.createElement("div");
@@ -117,9 +115,7 @@ export const renderCube = ({
     });
 
     face.classList.add(faceName);
-
-    face.innerText = faceName;
-
+    
     cube.appendChild(face);
   });
 
