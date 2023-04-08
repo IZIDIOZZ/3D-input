@@ -1269,6 +1269,42 @@ export default [
     ],
   },
   {
+    keyName: "(Selection)",
+    KeyCode: 90,
+    horizontalSpaceUnit: 2,
+    verticalSpaceUnit: 5,
+    cubes: [
+      {
+        horizontalPos: 0,
+        verticalPos: -1,
+      },
+      {
+        horizontalPos: 0,
+        verticalPos: 0,
+      },
+      {
+        horizontalPos: 0,
+        verticalPos: 1,
+      },
+      {
+        horizontalPos: 0,
+        verticalPos: 2,
+      },
+      {
+        horizontalPos: 0,
+        verticalPos: 3,
+      },
+      {
+        horizontalPos: 0,
+        verticalPos: 4,
+      },
+      {
+        horizontalPos: 0,
+        verticalPos: 5,
+      },
+    ],
+  },
+  {
     keyName: "(blank space)",
     KeyCode: 32,
     horizontalSpaceUnit: 4,

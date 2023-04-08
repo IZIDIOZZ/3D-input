@@ -1,26 +1,9 @@
-import { clearScene, renderCube } from "./src/generator/index.js";
+import { clearScene, generateLetter } from "./src/generator/index.js";
 import { generateRandomColor } from "./src/helpers/color/index.js";
 import { applyCssTo } from "./src/helpers/css/index.js";
 import { findKeyMap } from "./src/helpers/key-map-finder/index.js";
 import { lengthOf } from "./src/helpers/string/index.js";
 import keysMap from "./src/keys-map/index.js";
-const moveCameraHorizontal = (keyboardText, size, keysMap) => {
-  const cubes = document.querySelectorAll(".cube");
-
-  let sumOfView = 0;
-
-  for (const key of keyboardText.value) {
-    const keyMap = findKeyMap(key, keysMap);
-    if (!keyMap) continue;
-    sumOfView -= keyMap.horizontalSpaceUnit * size;
-  }
-
-  cubes.forEach((child) => {
-    applyCssTo(child, {
-      transform: `rotateY(45deg) translateX(${sumOfView}px)`,
-    });
-  });
-};
 
 export const init = ({ size = 200, perspective = 900 }) => {
   const keyboardScene = document.getElementById("keyboard-scene");
@@ -43,49 +26,21 @@ export const init = ({ size = 200, perspective = 900 }) => {
 
   keyboardText.addEventListener("keyup", (event) => {
     clearScene(keyboardScene, usedSpace);
-
     if (lengthOf(keyboardText)) removeUnmappedCharacters(keyboardText, keysMap);
 
-    generateLetter(
-      keyboardScene,
-      keyboardText,
-      usedSpace,
-      size,
-      keysMap,
-      color
-    );
+    for (const index in keyboardText.value) {
+      const keyMap = findKeyMap(keyboardText.value[index], keysMap);
+      if (!keyMap) continue;
+      generateLetter(keyboardScene, usedSpace, size, color, keyMap);
+    }
+
     moveCameraHorizontal(keyboardText, size, keysMap);
   });
 };
 
-const generateLetter = (
-  keyboardScene,
-  keyboardText,
-  usedSpace,
-  size,
-  keysMap,
-  { r, g, b }
-) => {
-  for (const index in keyboardText.value) {
-    const keyMap = findKeyMap(keyboardText.value[index], keysMap);
-    if (!keyMap) continue;
-
-    keyMap.cubes.forEach((cube) => {
-      keyboardScene.appendChild(
-        renderCube({
-          size,
-          usedSpace,
-          position: cube,
-          color: `rgb(${r},${g},${b})`,
-        })
-      );
-
-      usedSpace.zIndex -= 1;
-      usedSpace.verticalUnits = usedSpace.verticalUnits + 1;
-    });
-
-    usedSpace.horizontalUnits += keyMap.horizontalSpaceUnit;
-  }
+const focusTextInput = (keyboardText) => {
+  keyboardText.focus();
+  keyboardText.onblur = () => setTimeout(() => keyboardText.focus());
 };
 
 const removeUnmappedCharacters = (keyboardText, keysMap) => {
@@ -102,9 +57,21 @@ const removeUnmappedCharacters = (keyboardText, keysMap) => {
     );
 };
 
-const focusTextInput = (keyboardText) => {
-  keyboardText.focus();
-  keyboardText.onblur = () => setTimeout(() => keyboardText.focus());
+const moveCameraHorizontal = (keyboardText, size, keysMap) => {
+  const cubes = document.querySelectorAll(".cube");
+
+  let sumOfView = 0;
+  for (const key of keyboardText.value) {
+    const keyMap = findKeyMap(key, keysMap);
+    if (!keyMap) continue;
+    sumOfView -= keyMap.horizontalSpaceUnit * size;
+  }
+
+  cubes.forEach((child) => {
+    applyCssTo(child, {
+      transform: `rotateY(45deg) translateX(${sumOfView}px)`,
+    });
+  });
 };
 
 init({ size: 30, perspective: 1700 });

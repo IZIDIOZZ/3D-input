@@ -8,3 +8,6 @@ export const findKeyMap = (character, keysMap) =>
         .toUpperCase()
         .charCodeAt()
   );
+
+export const findKeyMapByName = (name, keysMap) =>
+  keysMap.find((x) => x.keyName.toUpperCase() === name.toUpperCase());
