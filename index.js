@@ -1,7 +1,7 @@
 import { generateRandomColor } from "./src/helpers/color/index.js";
-import { applyCssTo } from "./src/helpers/css/index.js";
-import { create3DInput } from "./src/helpers/services/input-service/index.js";
 import { focusTextInput } from "./src/helpers/text-focus/index.js";
+import { applyCssTo } from "./src/helpers/css/index.js";
+import inputService from "./src/services/input-service/index.js";
 
 export const init = ({ size = 200, perspective = 900 }) => {
   const keyboardScene = document.getElementById("keyboard-scene");
@@ -23,17 +23,16 @@ export const init = ({ size = 200, perspective = 900 }) => {
   const color = generateRandomColor();
 
   focusTextInput(keyboardText);
-  
-  keyboardText.addEventListener("keyup", (event) =>
-    create3DInput({
+
+  keyboardText.onkeyup = () =>
+    inputService.create3DInput({
       keyboardScene,
       keyboardText,
       usedSpace,
       letterList,
       size,
       color,
-    })
-  );
+    });
 };
 
 init({ size: 30, perspective: 1700 });

@@ -1,7 +1,7 @@
-import { applyCssTo } from "../helpers/css/index.js";
-import { getCubeFaces, getPositionByFace } from "../view-constants/index.js";
+import { getCubeFaces, getPositionByFace } from "../../constants/index.js";
+import { createHTMLElement } from "../../helpers/html-creation/index.js";
 
-export const renderCube = ({
+const renderCube = ({
   size,
   spacePosition: { horizontalUnits, verticalUnits, zIndex },
   cubePosition: { horizontalPos, verticalPos },
@@ -41,14 +41,7 @@ export const renderCube = ({
   return cube;
 };
 
-export const clearScene = (keyboardScene, usedSpace, letterList) => {
-  keyboardScene.innerHTML = "";
-  usedSpace.horizontalUnits = 0;
-  usedSpace.verticalUnits = 0;
-  letterList.splice(0, letterList.length);
-};
-
-export const generateLetter = (
+const generateLetter = (
   usedSpace,
   size,
   { r, g, b },
@@ -75,13 +68,11 @@ export const generateLetter = (
   });
 
   usedSpace.horizontalUnits += keyMap.horizontalSpaceUnit;
-  
+
   letterList.push(letter);
 };
 
-const createHTMLElement = ({ type = "div", css = {}, classes = [] }) => {
-  const htmlElement = document.createElement(type);
-  htmlElement.classList.add(...classes);
-  applyCssTo(htmlElement, css);
-  return htmlElement;
+export default {
+  renderCube,
+  generateLetter,
 };
