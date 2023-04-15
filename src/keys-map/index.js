@@ -3,7 +3,7 @@ export default [
     keyName: "A",
     KeyCode: 65,
     horizontalSpaceUnit: 4,
-    verticalSpaceUnit: 5,
+    verticalSpaceUnit: 4,
     cubes: [
       {
         horizontalPos: 0,
@@ -1226,7 +1226,7 @@ export default [
   {
     keyName: "Z",
     KeyCode: 90,
-    horizontalSpaceUnit: 5,
+    horizontalSpaceUnit: 4,
     verticalSpaceUnit: 5,
     cubes: [
       {

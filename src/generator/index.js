@@ -3,38 +3,37 @@ import { getCubeFaces, getPositionByFace } from "../view-constants/index.js";
 
 export const renderCube = ({
   size,
-  usedSpace: { horizontalUnits, verticalUnits, zIndex },
-  position: { horizontalPos, verticalPos },
+  spacePosition: { horizontalUnits, verticalUnits, zIndex },
+  cubePosition: { horizontalPos, verticalPos },
   color,
   styles,
 }) => {
-  const cube = document.createElement("div");
-  cube.classList.add("cube", "perspective");
-
-  applyCssTo(cube, {
-    zIndex,
+  const cube = createHTMLElement({
+    type: "div",
+    classes: ["cube", "perspective"],
+    css: { zIndex },
   });
 
   getCubeFaces({ size, color }).forEach(({ side: faceName, cssProps }) => {
-    let face = document.createElement("div");
-
     const { horizontal, vertical } = getPositionByFace(faceName);
-
-    applyCssTo(face, {
-      position: "absolute",
-      width: `${size}px`,
-      height: `${size}px`,
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      ...cssProps,
-      transform: `${cssProps.transform} ${horizontal(
-        (horizontalUnits + horizontalPos) * size
-      )} ${vertical((verticalUnits + verticalPos) * size)}`,
-      ...styles,
+    const face = createHTMLElement({
+      type: "div",
+      classes: [faceName],
+      css: {
+        position: "absolute",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        width: `${size}px`,
+        height: `${size}px`,
+        ...cssProps,
+        transform: `${cssProps.transform} 
+        ${horizontal((horizontalUnits + horizontalPos) * size)} 
+        ${vertical((verticalUnits + verticalPos) * size)}
+        `,
+        ...styles,
+      },
     });
-
-    face.classList.add(faceName);
 
     cube.appendChild(face);
   });
@@ -42,33 +41,47 @@ export const renderCube = ({
   return cube;
 };
 
-export const clearScene = (keyboardScene, usedSpace) => {
+export const clearScene = (keyboardScene, usedSpace, letterList) => {
   keyboardScene.innerHTML = "";
   usedSpace.horizontalUnits = 0;
   usedSpace.verticalUnits = 0;
+  letterList.splice(0, letterList.length);
 };
 
 export const generateLetter = (
-  keyboardScene,
   usedSpace,
   size,
   { r, g, b },
   keyMap,
+  letterList,
   styles = {}
 ) => {
-  keyMap.cubes.forEach((cube) => {
-    keyboardScene.appendChild(
+  const letter = createHTMLElement({ type: "div", classes: ["letter"] });
+  keyMap.cubes.forEach((cube, index) => {
+    letter.appendChild(
       renderCube({
         size,
-        usedSpace,
-        position: cube,
+        spacePosition: {
+          horizontalUnits: usedSpace.horizontalUnits,
+          verticalUnits: index,
+          zIndex: usedSpace.zIndex,
+        },
+        cubePosition: cube,
         color: `rgb(${r},${g},${b})`,
         styles,
       })
     );
     usedSpace.zIndex -= 1;
-    usedSpace.verticalUnits = usedSpace.verticalUnits + 1;
   });
 
   usedSpace.horizontalUnits += keyMap.horizontalSpaceUnit;
+  
+  letterList.push(letter);
+};
+
+const createHTMLElement = ({ type = "div", css = {}, classes = [] }) => {
+  const htmlElement = document.createElement(type);
+  htmlElement.classList.add(...classes);
+  applyCssTo(htmlElement, css);
+  return htmlElement;
 };
